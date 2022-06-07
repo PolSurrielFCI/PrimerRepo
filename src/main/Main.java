@@ -7,6 +7,9 @@ public class Main {
 
         System.out.println(txt.charAt(1));
         System.out.println("hola");
+        System.out.println("hola");
+        System.out.println("hola");
+        System.out.println("hola");
     }
 
 }

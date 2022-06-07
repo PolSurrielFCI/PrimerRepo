@@ -6,7 +6,7 @@ public class Main {
         String txt = "hola";
 
         System.out.println(txt.charAt(1));
-
+        System.out.println("hola");
     }
 
 }

@@ -15,7 +15,7 @@ public class Alumno extends RegistroPersona{
 
     }
 
-
+    
 
 
     public void cumplirCastigo(){

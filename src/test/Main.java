@@ -8,6 +8,10 @@ public class Main {
 
         Profesor pol = new Profesor();
 
+
+
+        //hola
+
         Alumno alex = new Alumno();
         alex.curso = 2;
         alex.notas = new float[]{ 3f,2f,1f,4f};

@@ -4,6 +4,14 @@ public class Profesor extends Empleado {
 
     public String[] asignaturas;
 
+    public void impartirClase(Alumno[] asistentes){
+
+    }
+
+    public void renunciarAlSueldo(){
+        sueldo = 0.0f;
+    }
+
     public void evaluar(Alumno alumno){
 
         float promedio = 0f;

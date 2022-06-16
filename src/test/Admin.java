@@ -4,6 +4,18 @@ public class Admin extends Empleado{
 
     public String cargo;
 
+    enum Cargos{
+        Administrativo,
+        Director,
+        Informatico
+    }
+
+    public static void mostrarCargosExistentes() {
+        System.out.println(Cargos.Administrativo.toString());
+        System.out.println(Cargos.Director.toString());
+        System.out.println(Cargos.Informatico.toString());
+    }
+
     public float calcularFiniquito(){
         return sueldo/30f * diasTrabajados;
     }

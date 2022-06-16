@@ -15,7 +15,10 @@ public class Alumno extends RegistroPersona{
 
     }
 
-    
+    public static void MostrarRequisitosAdmision(){
+        System.out.println("blablabla");
+
+    }
 
 
     public void cumplirCastigo(){

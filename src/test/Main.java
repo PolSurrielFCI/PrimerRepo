@@ -7,8 +7,10 @@ public class Main {
 
     public static void main(String[] args){
 
-        RegistroPersona a = new Alumno();
-        a.mostrarInformacionPublica();
+        Gos gos = new Gos();
+        Gat gat = new Gat();
+
+        gos.ferSoroll();
 
     }
 

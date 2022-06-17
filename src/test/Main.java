@@ -1,17 +1,15 @@
 package test;
 
 import java.util.Scanner;
-
-
 public class Main {
 
     public static void main(String[] args){
 
-        Gos gos = new Gos();
-        Gat gat = new Gat();
+        Figura f1 = new Pawn();
+        Figura f2 = new Queen();
 
-        gos.ferSoroll();
-
+        System.out.println(f1.movementIsValid("ataca"));
+        System.out.println(f2.movementIsValid("ataca"));
     }
 
 }

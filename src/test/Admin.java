@@ -4,6 +4,12 @@ public class Admin extends Empleado{
 
     public String cargo;
 
+    @Override
+    public void mostrarInformacionPublica() {
+        System.out.println("Admin con nombre: "+ nombre + "apellidos: " + apellidos);
+
+    }
+
     enum Cargos{
         Administrativo,
         Director,

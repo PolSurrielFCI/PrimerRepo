@@ -6,4 +6,8 @@ public abstract class RegistroPersona {
     public String apellidos;
     public String DNI;
 
+
+    public abstract void mostrarInformacionPublica();
+
+
 }

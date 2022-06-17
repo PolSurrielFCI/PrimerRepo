@@ -31,4 +31,9 @@ public class Alumno extends RegistroPersona{
     }
 
 
+    @Override
+    public void mostrarInformacionPublica() {
+        System.out.println("Alumno con nombre: "+ nombre + "apellidos: " + apellidos);
+
+    }
 }

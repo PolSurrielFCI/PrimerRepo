@@ -28,4 +28,8 @@ public class Profesor extends Empleado {
         }
     }
 
+    @Override
+    public void mostrarInformacionPublica() {
+        System.out.println("Profesor con nombre: "+ nombre + "apellidos: " + apellidos);
+    }
 }

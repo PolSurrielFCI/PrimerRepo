@@ -1,49 +1,53 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Main {
 
     public static void main(String[] args){
 
+        // Crear:
         LinkedList<Integer> list = new LinkedList<Integer>();
+        ArrayList<Integer> array = new ArrayList<Integer>();
 
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
+        // Anadir elemento:
+        list.add(2); // Añadimos un 2 a la lista
+        array.add(2); // Añadimos un 2 a la lista
 
+        // Acceder por indice:
+        System.out.println(list.get(0));
+        System.out.println(array.get(0));
+
+        // Eliminar el primer elemento:
+        list.remove(0);
+        array.remove(0);
+
+        // Anadir varios elementos en una linea:
+        list.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+        array.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+
+        // Recorrer y mostrar valores:
+        int count = 0;
+        while (count < list.size()){
+            System.out.println(list.get(count));
+            count += 1;
+        }
+
+        count = 0;
+        while (count < array.size()){
+            System.out.println(array.get(count));
+            count += 1;
+        }
+
+        // recorrer y mostrar con direcciones de memoria:
         Iterator it = list.iterator();
-        System.out.println(list.get(1));
-
-        while (it.hasNext()){
+        while(it.hasNext()){
             System.out.println(it.next());
         }
 
-
-
-    }
-
-    public static void ejemploArrayList(){
-        ArrayList<Integer> arr = new ArrayList<Integer>();
-
-        arr.add(1);
-        arr.add(2);
-        arr.add(3);
-        arr.add(4);
-        arr.add(5);
-
-        arr.remove(1);
-
-        int contador = 0;
-        while (contador < 100000){
-            System.out.println("hola que tal");
-            contador += 1;
+        Iterator itarray = array.iterator();
+        while(itarray.hasNext()){
+            System.out.println(itarray.next());
         }
-        System.out.println("He terminado");
 
     }
 

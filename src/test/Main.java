@@ -16,14 +16,13 @@ public class Main {
     public static Connection connect() {
         try {
             Class.forName("org.sqlite.JDBC");
-
         }catch (Exception e){
         }
 
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:C:/Users/psurr/Documents/sqlite/chinook.db";
+            String url = "jdbc:sqlite:C:/Users/psurr/Documents/sqlite/midb.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
@@ -42,7 +41,7 @@ public class Main {
 
     static void executeSQL(String sql){
         try{
-            Statement stmt = stmt = conn.createStatement();
+            Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
             stmt.close();
             System.out.println("sql statement executed");
@@ -55,7 +54,7 @@ public class Main {
     public static ResultSet executeQuery(String sql){
         ResultSet rs = null;
         try {
-            Statement stmt = stmt = conn.createStatement();
+            Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             System.out.println("sql query executed");
 
@@ -67,7 +66,7 @@ public class Main {
         return rs;
     }
 
-    public static void bdmain(){
+    public static void main(String [] args){
 
         conn = connect();
 
@@ -76,7 +75,8 @@ public class Main {
 
         executeSQL("CREATE TABLE person (\n" +
                 "    personID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
-                "    name TEXT NOT NULL\n" +
+                "    name TEXT NOT NULL,\n" +
+                "    secondName TEXT\n" +
                 ");");
 
         executeSQL("CREATE TABLE department (\n" +
@@ -85,15 +85,23 @@ public class Main {
                 "    FOREIGN KEY (leaderID) REFERENCES person(personID)\n" +
                 ");");
 
-        executeSQL("INSERT INTO person (name) VALUES (\"pepito\")");
-        executeSQL("INSERT INTO person (name) VALUES (\"manolito\")");
-        executeSQL("INSERT INTO person (name) VALUES (\"fernando\")");
-        executeSQL("INSERT INTO person (name) VALUES (\"gustavo\")");
+        // AÑADIR REGISTRO
+        executeSQL("INSERT INTO person (name, secondName) VALUES (\"pepito\",\"gonzalez\")");
+        executeSQL("INSERT INTO person (name, secondName) VALUES (\"manolito\",\"gonzalez\")");
+        executeSQL("INSERT INTO person (name, secondName) VALUES (\"fernando\",\"gonzalez\")");
+        executeSQL("INSERT INTO person (name, secondName) VALUES (\"gustavo\",\"gonzalez\")");
 
         executeSQL("INSERT INTO department (name) VALUES (\"contabilidad\")");
         executeSQL("INSERT INTO department (name, leaderID) VALUES (\"siestologia\", 2)");
+
+        // MODIFICAR REGISTRO
         executeSQL("UPDATE department SET leaderID = 1 WHERE name = \"contabilidad\"");
 
+        // ELIMINAR REGISTRO
+        //executeSQL("DELETE * FROM person WHERE personID = 3");
+        executeSQL("DELETE * FROM person WHERE name LIKE \"fernando\"");
+
+        // CONSULTAS
         ResultSet rs = executeQuery("SELECT * FROM person");
 
         System.out.println("\n\n\n\n________________________________");
@@ -133,79 +141,6 @@ public class Main {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-    }
-
-    public static void main(String [] args) throws IOException{
-
-        // Crear fichero
-        String ruta = "hola.txt";
-        File file = new File(ruta);
-        if(!file.exists()){
-            file.createNewFile();
-        }
-
-        // Escribir archivos
-        FileWriter writer = new FileWriter(ruta, false);
-//        writer.write("\necribiendo");
-//        writer.write("\necribiendo");
-//        writer.write("\necribiendo");
-//        writer.write("\necribiendo");
-
-        // Ejemplo escribir archivos
-        ArrayList<Persona> arr = new ArrayList<>();
-        arr.add(new Persona(0, "Pepito", "Gonzalez"));
-        arr.add(new Persona(1, "Manuel", "FFFF"));
-        arr.add(new Persona(2, "María", "SDDSFDFDFD"));
-        arr.add(new Persona(3, "Berta", "SDSD"));
-
-
-        int contador = 0;
-        writer.write(arr.size()+"\n");
-        while (contador < arr.size()){
-            writer.write(arr.get(contador).id+"\n");
-            writer.write(arr.get(contador).nom+"\n");
-            writer.write(arr.get(contador).cognom+"\n");
-            contador+=1;
-        }
-        writer.close();
-
-        // LEER FICHEROS
-        arr = new ArrayList<>();
-        Scanner fileReader = new Scanner(file);
-
-        int size = Integer.parseInt(fileReader.nextLine());
-        contador = 0;
-        while(contador < size){
-            int id = Integer.parseInt(fileReader.nextLine());
-            String name = fileReader.nextLine();
-            String secondName = fileReader.nextLine();
-            arr.add(new Persona(id, name, secondName));
-            contador++;
-        }
-        fileReader.close();
-
-        for ( Persona p: arr) {
-            System.out.println(p.id);
-            System.out.println(p.nom);
-            System.out.println(p.cognom);
-        }
-
-        // ELIMINAR FICHEROS:
-        Files.delete(file.toPath());
-
-    }
-
-    public static class Persona{
-        int id;
-        String nom;
-        String cognom;
-
-        Persona(int id, String nom, String cognom){
-            this.id = id;
-            this.nom = nom;
-            this.cognom = cognom;
-        }
-
     }
 
 

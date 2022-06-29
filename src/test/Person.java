@@ -7,6 +7,10 @@ public class Person {
 
     String name;
     String secondName;
+
+    /**
+     * id in the database
+     */
     int id;
 
 
@@ -17,6 +21,11 @@ public class Person {
 
     }
 
+    /**
+     * IMPORTANT: This function will only work if the Connection.conn has been initialized.
+     *
+     * @return the amout of inscriptions of this person.
+     */
     public int getInscriptionCount(){
 
         int numInscripciones = 0;
@@ -38,6 +47,11 @@ public class Person {
         return numInscripciones;
     }
 
+    /**
+     * IMPORTANT: This function will only work if the Connection.conn has been initialized.
+     *
+     * @return an ArrayList with all the persons registered in the database.
+     */
     public static ArrayList<Person> getAllPersons(){
         ResultSet result = DBManager.executeQuery("SELECT * FROM person");
 
@@ -59,6 +73,11 @@ public class Person {
         return personas;
     }
 
+    /**
+     * IMPORTANT: This function will only work if the Connection.conn has been initialized.
+     *
+     * @return an ArrayList with all the courses that this person is subscribed
+     */
     public ArrayList<Course> getInscriptionsInfo(){
 
         ArrayList<Course> resultado = new ArrayList<>();
@@ -88,3 +107,5 @@ public class Person {
 
 
 }
+
+

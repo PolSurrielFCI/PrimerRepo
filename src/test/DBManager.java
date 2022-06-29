@@ -1,11 +1,17 @@
 package test;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DBManager {
+
     static Connection conn;
 
-    static void executeSQL(String sql){
+    /**
+     * Executes the specified SQL instruction.
+     * @param sql instruction to execute in string.
+     */
+    public static void executeSQL(String sql){
         try{
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
@@ -16,6 +22,11 @@ public class DBManager {
         }
 
     }
+
+    /**
+     * Connects to the database writing the static conn attribute and returning the connection.
+     * @return the connection to the database.
+     */
     public static Connection connect() {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -40,6 +51,9 @@ public class DBManager {
         return conn;
     }
 
+    /**
+     * Closes the DB connection without checking if it is already opened
+     */
     public static void closeConnection(){
         try {
             if (DBManager.conn != null) {
@@ -50,6 +64,9 @@ public class DBManager {
         }
     }
 
+    /**
+     * Creates the database with testing information for playground purposes.
+     */
     public static void InitializeDB(){
         DBManager.conn = connect();
 
@@ -93,8 +110,12 @@ public class DBManager {
         DBManager.executeSQL("INSERT INTO inscriptions (personID, courseName) VALUES (3,\"criptomonedas\")");
 
     }
-    
 
+    /**
+     * Executes the specified SQL query instruction and returns its result.
+     * @param sql instruction to execute in string.
+     * @return the query's result in a ResultSet.
+     */
     public static ResultSet executeQuery(String sql){
         ResultSet rs = null;
         try {
@@ -106,6 +127,36 @@ public class DBManager {
         }
 
         return rs;
+    }
+
+    /**
+     * Shows all the db information. Witch includes the all person complete names,
+     * inscriptions, hours for each inscripted course and total cursed hours.
+     */
+    public static void showDBContent(){
+        System.out.println("Personas:");
+        ArrayList<Person> people = Person.getAllPersons();
+        for (int i = 0; i < people.size(); i++){
+
+            Person currentPerson = people.get(i);
+
+            String output = currentPerson.name + " " + currentPerson.secondName + ", esta inscrita a los cursos de:\n";
+
+            if(currentPerson.getInscriptionCount() == 0){
+                output += currentPerson.name + " no tiene ninguna inscripcion.\n";
+
+            }else {
+                ArrayList<Course> cursos = currentPerson.getInscriptionsInfo();
+
+                for (int j = 0; j < cursos.size(); j++) {
+                    output += "   - "+cursos.get(j).name +" de "+cursos.get(j).hours + " horas.\n";
+                }
+                output += "Lo cual suma un total de "+Course.calcularTotalHoras(cursos)+" horas.\n";
+
+            }
+
+            System.out.println(output);
+        }
     }
 
 }

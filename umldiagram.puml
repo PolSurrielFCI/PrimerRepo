@@ -1,0 +1,57 @@
+@startuml
+class test.Main {
++ {static} void main(String[])
+}
+abstract class test.Empleado {
++ float sueldo
++ int diasTrabajados
+}
+abstract class test.RegistroPersona {
++ String nombre
++ String apellidos
++ String DNI
++ {abstract}void mostrarInformacionPublica()
+}
+class test.Admin {
++ String cargo
++ void mostrarInformacionPublica()
++ {static} void mostrarCargosExistentes()
++ float calcularFiniquito()
++ {static} void function1()
++ void function2()
+}
+enum test.Cargos {
++  Administrativo
++  Director
++  Informatico
+}
+class test.Profesor {
++ String[] asignaturas
++ void impartirClase(Alumno[])
++ void renunciarAlSueldo()
++ void evaluar(Alumno)
++ void mostrarInformacionPublica()
+}
+class test.Alumno {
++ int curso
++ String[] asignaturasRepetidas
++ float[] notas
++ {static} void MostrarRequisitosAdmision()
++ void cumplirCastigo()
++ void mostrarInformacionPublica()
+}
+class test.GestionAcademica {
+~ Alumno[] alumnos
+~ Profesor[] profesores
+~ Admin[] administrativos
++ void mostrarAlumnos()
++ void mostrarProfesores()
++ void MostrarAdministrativos()
+}
+
+
+test.RegistroPersona <|-- test.Empleado
+test.Empleado <|-- test.Admin
+test.Empleado <|-- test.Profesor
+test.RegistroPersona <|-- test.Alumno
+@enduml

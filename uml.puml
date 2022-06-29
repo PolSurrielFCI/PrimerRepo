@@ -1,0 +1,27 @@
+@startuml
+class test.Person {
+~ String name
+~ String secondName
+~ int id
++ int getInscriptionCount()
++ {static} ArrayList<Person> getAllPersons()
++ ArrayList<Course> getInscriptionsInfo()
+}
+class test.DBManager {
+~ {static} Connection conn
++ {static} void executeSQL(String)
++ {static} Connection connect()
++ {static} void closeConnection()
++ {static} void InitializeDB()
++ {static} ResultSet executeQuery(String)
+}
+class test.Main {
++ {static} void showDBContent()
++ {static} void main(String[])
+}
+class test.Course {
++ int hours
++ String name
++ {static} int calcularTotalHoras(ArrayList<Course>)
+}
+@enduml

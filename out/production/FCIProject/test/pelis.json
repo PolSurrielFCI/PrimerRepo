@@ -1,0 +1,29 @@
+{
+  "peliculas" : [
+    {
+      "name":"toy story",
+      "duracion": 200,
+      "descripcion": "dhskjdsddhkd",
+      "valoracion": 5
+    },
+    {
+      "name":"batman",
+      "duracion": 200,
+      "descripcion": "dhskjdsddhkd",
+      "valoracion": 5
+
+    },
+    {
+      "name":"el pianista",
+      "duracion": 200,
+      "valoracion": 4.5
+
+    },
+    {
+      "name":"toy story",
+      "duracion": 200,
+      "descripcion": "dhskjdsddhkd",
+      "valoracion": 5
+    }
+  ]
+}

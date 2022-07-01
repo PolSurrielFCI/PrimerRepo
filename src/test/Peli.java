@@ -1,6 +1,8 @@
 package test;
 
-public class Peli {
+import java.io.Serializable;
+
+public class Peli implements Serializable {
 
     String name;
     int duration;

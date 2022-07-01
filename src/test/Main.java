@@ -1,99 +1,137 @@
 package test;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.*;
-import com.fasterxml.jackson.*;
-import org.json.CDL;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
-import java.io.File;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
 import java.util.ArrayList;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Main {
 
-    public static void ejemplo1JSON() throws JSONException{
-        ArrayList<String> cursos = new ArrayList<>();
-        cursos.add("andorid");
-        cursos.add("machinelearning");
-        cursos.add("desarrolloweb");
+    public static void ejercicioXML1() throws ParserConfigurationException, IOException, SAXException {
+        ArrayList<Peli> pelis = new ArrayList<>();
+        pelis.add(new Peli("toy story",200, "dsdsdd", 5.0));
+        pelis.add(new Peli("el pieanista",50, "dsdsdd", 5.6));
+        pelis.add(new Peli("aventuras en el espacio",10, "dsdsdd", 5.0));
+        pelis.add(new Peli("espacio en las aventuras",200, "dsdsdd", 5.0));
 
-        var user = new JSONObject();
 
-        user.put("name", "Pol");
-        user.put("apellido", "Surriel");
-        user.put("edad", Integer.valueOf(24));
-        user.put("isMail", Boolean.TRUE);
-        user.put("cursos", new JSONArray(cursos));
+        File inputFile = new File("src/test/pelis.xml");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(inputFile);
+        doc.getDocumentElement().normalize();
+        System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
-        var userJson = user.toString();
-        System.out.println(userJson);
+        System.out.println("----------------------");
+        NodeList pelisLeidas = doc.getElementsByTagName("peli");
+
+        for (int i = 0; i < pelisLeidas.getLength(); i++) {
+            Element currentNode = (Element) pelisLeidas.item(i);
+            String name = currentNode.getElementsByTagName("name").item(0).getTextContent();
+            int duration = Integer.parseInt(currentNode.getElementsByTagName("duration").item(0).getTextContent());
+            String description = currentNode.getElementsByTagName("description").item(0).getTextContent();
+            Double rating = Double.parseDouble(currentNode.getElementsByTagName("rating").item(0).getTextContent());
+            int year = Integer.parseInt(currentNode.getAttribute("year"));
+
+            System.out.println("name: "+name);
+            System.out.println("duration: "+duration);
+            System.out.println("description: "+description);
+            System.out.println("rating: "+rating);
+            System.out.println("year: "+year);
+
+            System.out.println("\n");
+
+        }
     }
 
-    public static void ejemplo2JSON() throws JSONException{
-        String data = """
-                {"name": "John Doe",
-                "occupation": "gardener",
-                "siblings": "2",
-                "height": "172.35",
-                "married": "true"}""";
 
-        var user = new JSONObject(data);
+    public static void addFilmToRoot(Element root, Document doc, Peli peliData){
+        Element peli = doc.createElement("peli");
+        root.appendChild(peli);
 
-        System.out.println(user.get("name"));
-        System.out.println(user.get("occupation"));
-        System.out.println(user.get("siblings"));
+        Element name = doc.createElement("name");
+        name.appendChild(doc.createTextNode(peliData.name));
+        peli.appendChild(name);
+
+        Element duration = doc.createElement("duration");
+        duration.appendChild(doc.createTextNode(peliData.duration+""));
+        peli.appendChild(duration);
+
+        Element description = doc.createElement("description");
+        description.appendChild(doc.createTextNode(peliData.description));
+        peli.appendChild(description);
+
+        Element rating = doc.createElement("rating");
+        rating.appendChild(doc.createTextNode(peliData.valoracion+""));
+        peli.appendChild(rating);
+
+        Attr yeatAttr = doc.createAttribute("year");
+        yeatAttr.setValue("2020");
+        peli.setAttributeNode(yeatAttr);
+
     }
 
-    public void ejemplo3JSON() throws JSONException, IOException {
+    public static void main(String [] args) throws IOException, ParserConfigurationException, SAXException, ClassNotFoundException, TransformerException {
 
-        String data = Files.readString(Paths.get("src/test/pelis.json"),
-                StandardCharsets.UTF_8);
 
-        JSONObject readed = new JSONObject(data);
+        ArrayList<Peli> pelis = new ArrayList<>();
+        pelis.add(new Peli("toy story",200, "dsdsdd", 5.0));
+        pelis.add(new Peli("el pieanista",50, "dsdsdd", 5.6));
+        pelis.add(new Peli("aventuras en el espacio",10, "dsdsdd", 5.0));
+        pelis.add(new Peli("espacio en las aventuras",200, "dsdsdd", 5.0));
 
-        JSONArray pelisArray = readed.getJSONArray("peliculas");
 
-        for (int i = 0; i < pelisArray.length(); i++) {
-            var peli = pelisArray.getJSONObject(i);
-            var name = peli.getString("name");
-            var duration = peli.getInt("duracion");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.newDocument();
 
-            String description = "sin descripcion";
+        Element root = doc.createElement("root");
+        doc.appendChild(root);
 
-            try {
-                description = peli.getString("descripcion");
-            }catch (JSONException e){}
-
-            var rating = peli.getDouble("valoracion");
-
-            System.out.println(name);
-            System.out.println(duration);
-            System.out.println(description);
-            System.out.println(rating);
+        for (var peli : pelis) {
+            addFilmToRoot(root, doc, peli);
         }
 
 
-    }
 
-    public static void main(String [] args) throws JSONException, IOException {
 
-//        XmlMapper  mapper = new XmlMapper();
+        // GUARDAR EN ARCHIVO
+        // write the content into xml file
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File("src/test/pelis2.xml"));
+        transformer.transform(source, result);
+
+        // Output to console for testing
+        StreamResult consoleResult = new StreamResult(System.out);
+        transformer.transform(source, consoleResult);
+
+
+
+//        ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("src/test/pelidata.bin"));
+//        writer.writeObject(pelis);
+//        writer.close();
 //
-//        ArrayList<Peli> pelis = new ArrayList<>();
-//        pelis.add(new Peli("toy story",200, "dsdsdd", 5.0));
-//        pelis.add(new Peli("el pieanista",50, "dsdsdd", 5.6));
-//        pelis.add(new Peli("aventuras en el espacio",10, "dsdsdd", 5.0));
-//        pelis.add(new Peli("espacio en las aventuras",200, "dsdsdd", 5.0));
+//        ObjectInputStream reader = new ObjectInputStream(new FileInputStream("src/test/pelidata.bin"));
 //
+//        ArrayList<Peli> readedpelis = new ArrayList<>();
+//        readedpelis = (ArrayList<Peli>) reader.readObject();
 //
-//        mapper.writeValue(new File("pelis2.xml"), pelis);
+//        for (var peli : readedpelis) {
+//            System.out.println(peli.name);
+//        }
+
+
 
     }
 

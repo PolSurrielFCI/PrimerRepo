@@ -50,32 +50,6 @@ public class Main {
     }
 
 
-    public static void addFilmToRoot(Element root, Document doc, Peli peliData){
-        Element peli = doc.createElement("peli");
-        root.appendChild(peli);
-
-        Element name = doc.createElement("name");
-        name.appendChild(doc.createTextNode(peliData.name));
-        peli.appendChild(name);
-
-        Element duration = doc.createElement("duration");
-        duration.appendChild(doc.createTextNode(peliData.duration+""));
-        peli.appendChild(duration);
-
-        Element description = doc.createElement("description");
-        description.appendChild(doc.createTextNode(peliData.description));
-        peli.appendChild(description);
-
-        Element rating = doc.createElement("rating");
-        rating.appendChild(doc.createTextNode(peliData.valoracion+""));
-        peli.appendChild(rating);
-
-        Attr yeatAttr = doc.createAttribute("year");
-        yeatAttr.setValue("2020");
-        peli.setAttributeNode(yeatAttr);
-
-    }
-
     public static void main(String [] args) throws IOException, ParserConfigurationException, SAXException, ClassNotFoundException, TransformerException {
 
 
@@ -86,50 +60,18 @@ public class Main {
         pelis.add(new Peli("espacio en las aventuras",200, "dsdsdd", 5.0));
 
 
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.newDocument();
+        ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("src/test/pelidata.bin"));
+        writer.writeObject(pelis);
+        writer.close();
 
-        Element root = doc.createElement("root");
-        doc.appendChild(root);
+        ObjectInputStream reader = new ObjectInputStream(new FileInputStream("src/test/pelidata.bin"));
 
-        for (var peli : pelis) {
-            addFilmToRoot(root, doc, peli);
+        ArrayList<Peli> readedpelis = new ArrayList<>();
+        readedpelis = (ArrayList<Peli>) reader.readObject();
+
+        for (var peli : readedpelis) {
+            System.out.println(peli.name);
         }
-
-
-
-
-        // GUARDAR EN ARCHIVO
-        // write the content into xml file
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("src/test/pelis2.xml"));
-        transformer.transform(source, result);
-
-        // Output to console for testing
-        StreamResult consoleResult = new StreamResult(System.out);
-        transformer.transform(source, consoleResult);
-
-
-
-//        ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("src/test/pelidata.bin"));
-//        writer.writeObject(pelis);
-//        writer.close();
-//
-//        ObjectInputStream reader = new ObjectInputStream(new FileInputStream("src/test/pelidata.bin"));
-//
-//        ArrayList<Peli> readedpelis = new ArrayList<>();
-//        readedpelis = (ArrayList<Peli>) reader.readObject();
-//
-//        for (var peli : readedpelis) {
-//            System.out.println(peli.name);
-//        }
 
 
 
